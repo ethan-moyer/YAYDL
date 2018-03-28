@@ -4,7 +4,6 @@ from tkinter import *
 from tkinter import ttk
 import os
 from threading import Thread
-import tkinter.filedialog
 
 def my_hook(d):
     if d['status'] == 'downloading':
@@ -16,7 +15,8 @@ ydl_opts = {
     'noplaylist' : False,
     'format' : 'best[height=144]',
     'listformats' : False,
-    'progress_hooks' : [my_hook]
+    'progress_hooks' : [my_hook],
+    'outtmpl' : os.getcwd() + '\downloads\%(title)s.%(ext)s'
 }
 #def downloadStart():
     #status.set('Status: Downloading')
@@ -37,15 +37,12 @@ def downloadLink():
     status.set('Status: Done')
 
 def streamCommand():
-    command = 'mpv --ytdl-format="bestvideo[height<=' + resolutionVar.get() + ']+bestaudio/best" ' + url.get()
+    command = 'mpv --ytdl-format="bestvideo[height<=' + resolutionVar.get() + ']+bestaudio" ' + url.get()
     t = Thread(target = lambda: os.system(command))
     t.start()
-def openMenu():
-    menuWindow = tkinter.Toplevel()
-
+print(os.getcwd())
 top = tkinter.Tk()
-menubar = tkinter.Menu(top)
-menubar.add_command(label = "About", command = openMenu)
+top.title("Yet Another Youtube Downloader")
 status = tkinter.StringVar()
 status.set("Status: ")
 theme = ttk.Style()
@@ -67,5 +64,4 @@ audioGUI.grid(row=2, column=1)
 stream.grid(row=2, column=3)
 download.grid(row=2, column=2)
 statusGUI.grid(row=3, column=1)
-top.config(menu=menubar)
 top.mainloop()
