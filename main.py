@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import ttk
 import os
 from threading import Thread
+import tkinter.filedialog
 
 def my_hook(d):
     if d['status'] == 'downloading':
@@ -27,7 +28,7 @@ def downloadLink():
     audioCheck = isAudioOnly.get()
     print(audioCheck)
     if (audioCheck == 0):
-        ydl_opts['format'] = 'bestvideo[height<=' + resolutionVar.get() + ']+bestaudio' 
+        ydl_opts['format'] = 'bestvideo[height<=' + resolutionVar.get() + ']+bestaudio/best' 
     else:
         ydl_opts['format'] = 'bestaudio[ext=m4a]/bestaudio' 
     print(ydl_opts['format'])
@@ -36,11 +37,15 @@ def downloadLink():
     status.set('Status: Done')
 
 def streamCommand():
-    command = 'mpv --ytdl-format="bestvideo[height<=' + resolutionVar.get() + ']+bestaudio" ' + url.get()
+    command = 'mpv --ytdl-format="bestvideo[height<=' + resolutionVar.get() + ']+bestaudio/best" ' + url.get()
     t = Thread(target = lambda: os.system(command))
     t.start()
+def openMenu():
+    menuWindow = tkinter.Toplevel()
 
 top = tkinter.Tk()
+menubar = tkinter.Menu(top)
+menubar.add_command(label = "About", command = openMenu)
 status = tkinter.StringVar()
 status.set("Status: ")
 theme = ttk.Style()
@@ -62,4 +67,5 @@ audioGUI.grid(row=2, column=1)
 stream.grid(row=2, column=3)
 download.grid(row=2, column=2)
 statusGUI.grid(row=3, column=1)
+top.config(menu=menubar)
 top.mainloop()
