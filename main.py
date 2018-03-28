@@ -15,7 +15,8 @@ ydl_opts = {
     'noplaylist' : False,
     'format' : 'best[height=144]',
     'listformats' : False,
-    'progress_hooks' : [my_hook]
+    'progress_hooks' : [my_hook],
+    'outtmpl' : os.getcwd() + '\downloads\%(title)s.%(ext)s'
 }
 #def downloadStart():
     #status.set('Status: Downloading')
@@ -27,7 +28,7 @@ def downloadLink():
     audioCheck = isAudioOnly.get()
     print(audioCheck)
     if (audioCheck == 0):
-        ydl_opts['format'] = 'bestvideo[height<=' + resolutionVar.get() + ']+bestaudio' 
+        ydl_opts['format'] = 'bestvideo[height<=' + resolutionVar.get() + ']+bestaudio/best' 
     else:
         ydl_opts['format'] = 'bestaudio[ext=m4a]/bestaudio' 
     print(ydl_opts['format'])
@@ -39,8 +40,9 @@ def streamCommand():
     command = 'mpv --ytdl-format="bestvideo[height<=' + resolutionVar.get() + ']+bestaudio" ' + url.get()
     t = Thread(target = lambda: os.system(command))
     t.start()
-
+print(os.getcwd())
 top = tkinter.Tk()
+top.title("Yet Another Youtube Downloader")
 status = tkinter.StringVar()
 status.set("Status: ")
 theme = ttk.Style()
