@@ -1,5 +1,6 @@
 import os
 from subprocess import Popen
+from subprocess import call
 from shlex import quote
 
 import youtube_dl
@@ -60,9 +61,10 @@ def stream_command():
     res = resolutionVar.get()
 
     vformat = VIDEO_FORMAT.format(res=res)
-    command = ['mpv', "--ytdl-format=''{}''".format(vformat), quote(url.get())]
+    #command = ['mpv', "--ytdl-format='{}'".format(vformat), url.get()]
+    command = 'mpv --ytdl-format="' + format(vformat) + '" ' + url.get()
     logging.debug(command)
-    Popen(command)
+    os.system(command)
 
 logging.debug(os.getcwd())
 
